@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::disableForeignKeyConstraints();
+
+        Schema::create('user_payments', function (Blueprint $table) {
+            $table->id();
+            // $table->id()->foreign('users.id');
+            // $table->unsignedBigInteger('userId');
+            $table->foreignId('userId')->constrained('users')->onDelete('RESTRICT')->onUpdate('cascade');
+            $table->string('paymentType');
+            $table->string('provider');
+            $table->string('accountNo');
+            $table->date('expiry');
+            $table->timestamps();
+        });
+
+        Schema::enableForeignKeyConstraints();
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('user_payments');
+    }
+};
